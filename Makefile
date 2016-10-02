@@ -1,13 +1,13 @@
-CC=g++
-CFLAGS=-g -Wall
-TARGET=prodcons
+FLAGS=-g -Wall -std=c++11
+LIB=-pthread
+EXEC=prodcons
 SRC=ProdCons.cpp
 
-all: $(TARGET)
+all: $(EXEC)
 
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -std=c++11 -pthread -o $(TARGET) $(SRC)
+$(EXEC): $(SRC)
+	$(CXX) $(FLAGS) $^ $(LIB) -o $@
 
 clean:
-	$(RM) $(TARGET)
+	$(RM) $(EXEC)
 
