@@ -43,5 +43,5 @@ class SyncQueue {
         }
 };
 
-#endif //__SYCQUEUE_
+#endif //__SYNCQUEUE_
 
