@@ -22,11 +22,22 @@ class Task {
         }
 };
 
-SyncQueue<std::function<int(void)>> taskQ;
+mutex mtx;
 
-void doProd(int val) {
+SyncQueue<std::function<void(void)>> taskQ;
+
+auto task = [] { 
+    std::unique_lock<mutex> lck(mtx); 
+    cout << "Thread " << std::this_thread::get_id() << " processes task" <<  endl;
+};
+
+void doProd(int type) {
     while(true) {
-        taskQ.push(Task(val));
+        taskQ.push([=]() {
+                std::unique_lock<mutex> lck(mtx);
+                cout << "Thread " << std::this_thread::get_id() << " processes task of type " << type <<  endl;
+                }
+                );
         this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
@@ -40,8 +51,8 @@ void doCons() {
 
 
 int main() {
-    thread prod1(doProd, 7);
-    thread prod2(doProd, 5);
+    thread prod1(doProd, 1);
+    thread prod2(doProd, 2);
     thread cons1(doCons);
     thread cons2(doCons);
     thread cons3(doCons);
