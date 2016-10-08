@@ -30,17 +30,19 @@ class SyncQueue {
             queue.pop();
         }
 
-        T& front() {
+        T front() {
             std::unique_lock<std::mutex> lck(mtx);
-            if (queue.empty()) {
+            while (queue.empty()) {
                 cond.wait(lck);
             }
-            return queue.front();
+            auto front = queue.front();
+            queue.pop();
+            return front;
         }
 
-        const T& front() const {
-            return const_cast<SyncQueue<T>*>(this)->front();
-        }
+//        const T& front() const {
+//            return const_cast<SyncQueue<T>*>(this)->front();
+//        }
 };
 
 #endif //__SYNCQUEUE_
