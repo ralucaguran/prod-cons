@@ -22,11 +22,18 @@ class Task {
         }
 };
 
-SyncQueue<std::function<int(void)>> taskQ;
+mutex mtx;
+
+SyncQueue<std::function<void(void)>> taskQ;
+
+auto task = [] { 
+    std::unique_lock<mutex> lck(mtx); 
+    cout << "Thread " << std::this_thread::get_id() << " processes task" <<  endl;
+};
 
 void doProd(int val) {
     while(true) {
-        taskQ.push(Task(val));
+        taskQ.push(task);
         this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
