@@ -26,11 +26,6 @@ mutex mtx;
 
 SyncQueue<std::function<void(void)>> taskQ;
 
-auto task = [] { 
-    std::unique_lock<mutex> lck(mtx); 
-    cout << "Thread " << std::this_thread::get_id() << " processes task" <<  endl;
-};
-
 void doProd(int type) {
     while(true) {
         taskQ.push([=]() {
