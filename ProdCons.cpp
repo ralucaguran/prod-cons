@@ -2,6 +2,7 @@
 #include <mutex>
 #include <iostream>
 #include <chrono>
+#include <functional>
 
 #include "SyncQueue.h"
 
@@ -24,15 +25,15 @@ class Task {
 
 mutex coutMutex;
 
-SyncQueue<std::function<void(void)>> taskQ;
+SyncQueue<function<void(void)>> taskQ;
+auto task = [](int type)->void { 
+    std::unique_lock<mutex> lck(coutMutex);
+    cout << "Thread " << std::this_thread::get_id() << " processes task of type " << type <<  endl;
+};
 
 void doProd(int type) {
     while(true) {
-        taskQ.push([=]() {
-                std::unique_lock<mutex> lck(coutMutex);
-                cout << "Thread " << std::this_thread::get_id() << " processes task of type " << type <<  endl;
-                }
-                );
+        taskQ.push(bind(task, type));
         this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
