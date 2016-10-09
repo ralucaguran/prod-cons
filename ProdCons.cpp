@@ -22,14 +22,14 @@ class Task {
         }
 };
 
-mutex mtx;
+mutex coutMutex;
 
 SyncQueue<std::function<void(void)>> taskQ;
 
 void doProd(int type) {
     while(true) {
         taskQ.push([=]() {
-                std::unique_lock<mutex> lck(mtx);
+                std::unique_lock<mutex> lck(coutMutex);
                 cout << "Thread " << std::this_thread::get_id() << " processes task of type " << type <<  endl;
                 }
                 );
