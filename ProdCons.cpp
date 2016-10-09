@@ -39,7 +39,7 @@ void doProd(int type) {
 
 void doCons() {
     while(true) {
-        auto task = taskQ.front();
+        auto task = taskQ.pop();
         task();
     }
 }
