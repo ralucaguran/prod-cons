@@ -27,7 +27,7 @@ mutex coutMutex;
 
 SyncQueue<function<void(void)>> taskQ;
 auto task = [](int type)->void { 
-    std::unique_lock<mutex> lck(coutMutex);
+    std::lock_guard<mutex> lck(coutMutex);
     cout << "Thread " << std::this_thread::get_id() << " processes task of type " << type <<  endl;
 };
 
