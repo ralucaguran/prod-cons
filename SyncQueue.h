@@ -1,5 +1,5 @@
-#ifndef __SYNCQUEUE_
-#define __SYNCQUEUE_
+#ifndef __SYNCQUEUE__
+#define __SYNCQUEUE__
 
 #include <queue>
 #include <mutex>
@@ -37,5 +37,5 @@ class SyncQueue {
 
 };
 
-#endif //__SYNCQUEUE_
+#endif //__SYNCQUEUE__
 

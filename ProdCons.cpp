@@ -5,8 +5,7 @@
 #include <functional>
 
 #include "SyncQueue.h"
-
-using namespace std;
+#include "Util.h"
 
 
 class Task {
@@ -18,23 +17,22 @@ class Task {
         }
 
         int operator()() {
-            cout << info << endl;
+            std::cout << info << std::endl;
             return 0;
         }
 };
 
-mutex coutMutex;
 
-SyncQueue<function<void(void)>> taskQ;
+SyncQueue<std::function<void(void)>> taskQ;
 auto task = [](int type)->void { 
-    std::lock_guard<mutex> lck(coutMutex);
-    cout << "Thread " << std::this_thread::get_id() << " processes task of type " << type <<  endl;
+    std::lock_guard<std::mutex> lck(stdoutLock);
+    std::cout << "Thread " << std::this_thread::get_id() << " processes task of type " << type <<  std::endl;
 };
 
 void doProd(int type) {
     while(true) {
-        taskQ.push(bind(task, type));
-        this_thread::sleep_for(std::chrono::milliseconds(100));
+        taskQ.push(std::bind(task, type));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
@@ -47,11 +45,11 @@ void doCons() {
 
 
 int main() {
-    thread prod1(doProd, 1);
-    thread prod2(doProd, 2);
-    thread cons1(doCons);
-    thread cons2(doCons);
-    thread cons3(doCons);
+    std::thread prod1(doProd, 1);
+    std::thread prod2(doProd, 2);
+    std::thread cons1(doCons);
+    std::thread cons2(doCons);
+    std::thread cons3(doCons);
     prod1.join();
     prod2.join();
     cons1.join();

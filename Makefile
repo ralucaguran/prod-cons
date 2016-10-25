@@ -1,7 +1,7 @@
 FLAGS=-g -Wall -std=c++11
 LIB=-pthread
 EXEC=prodcons
-SRC=ProdCons.cpp
+SRC=ProdCons.cpp Util.cpp
 
 all: $(EXEC)
 
